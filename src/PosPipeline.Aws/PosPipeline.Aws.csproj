@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Adapters: the AWS implementations of the ports declared in PosPipeline.Core, plus the
+    composition root that wires them up from environment variables. Keeping them here means
+    the Lambda entry points stay thin and the domain stays free of the AWS SDK.
+  -->
+  <PropertyGroup>
+    <RootNamespace>PosPipeline.Aws</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.Core" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" />
+    <PackageReference Include="AWSSDK.SQS" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PosPipeline.Core\PosPipeline.Core.csproj" />
+  </ItemGroup>
+
+</Project>

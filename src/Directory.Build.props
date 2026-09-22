@@ -1,0 +1,17 @@
+<Project>
+
+  <!-- Shared settings for every project in the solution. -->
+  <PropertyGroup>
+    <!--
+      net8.0 is the target because it is the newest .NET version with an AWS Lambda
+      *managed* runtime (dotnet8). Newer SDKs can build it; see README "Key decisions".
+    -->
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

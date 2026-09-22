@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PosPipeline.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <!--
+      The tests target net8.0 like the Lambdas, but a machine that only has a newer .NET
+      runtime installed (the SDK ships the 8.0 targeting pack, not the 8.0 runtime) can
+      still run them.
+    -->
+    <RollForward>LatestMajor</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PosPipeline.Core\PosPipeline.Core.csproj" />
+    <!-- For the handler test; the other Lambda entry points are covered through their use cases. -->
+    <ProjectReference Include="..\PosPipeline.IngestApi\PosPipeline.IngestApi.csproj" />
+  </ItemGroup>
+
+</Project>

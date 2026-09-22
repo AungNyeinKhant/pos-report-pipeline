@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="940" viewBox="0 0 900 940" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.2" orient="auto">
+      <path d="M0,0 L9,3.2 L0,6.4 z" fill="#4a5568"/>
+    </marker>
+    <marker id="arrowDashed" markerWidth="10" markerHeight="10" refX="9" refY="3.2" orient="auto">
+      <path d="M0,0 L9,3.2 L0,6.4 z" fill="#8a94a6"/>
+    </marker>
+    <style>
+      .box { stroke-width: 1.6; }
+      .lambda { fill: #fdead2; stroke: #d97706; }
+      .storage { fill: #dcefdc; stroke: #2f855a; }
+      .database { fill: #dbe6fa; stroke: #2b4f9e; }
+      .queue { fill: #f0dcf5; stroke: #8039a8; }
+      .gateway { fill: #e3dcf7; stroke: #5b3fa8; }
+      .client { fill: #e8ebef; stroke: #64748b; }
+      .dlq { fill: #fadcdc; stroke: #b03636; }
+      .title { font-size: 14px; font-weight: 600; fill: #1a202c; }
+      .subtitle { font-size: 11.5px; fill: #4a5568; }
+      .edge { stroke: #4a5568; stroke-width: 1.6; fill: none; }
+      .edgeDashed { stroke: #8a94a6; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+      .edgeLabel { font-size: 11px; fill: #4a5568; }
+      .caption { font-size: 11.5px; fill: #4a5568; }
+      .heading { font-size: 16px; font-weight: 700; fill: #1a202c; }
+    </style>
+  </defs>
+
+  <rect width="900" height="940" fill="#ffffff"/>
+  <text x="40" y="26" class="heading">POS report processing pipeline</text>
+
+  <!-- ============================ boxes ============================ -->
+
+  <!-- client -->
+  <rect x="40" y="40" width="230" height="64" rx="8" class="box client"/>
+  <text x="155" y="66" text-anchor="middle" class="title">Client</text>
+  <text x="155" y="85" text-anchor="middle" class="subtitle">curl / ground system</text>
+
+  <!-- api gateway -->
+  <rect x="335" y="40" width="230" height="64" rx="8" class="box gateway"/>
+  <text x="450" y="66" text-anchor="middle" class="title">API Gateway (REST)</text>
+  <text x="450" y="85" text-anchor="middle" class="subtitle">prod stage</text>
+
+  <!-- ingest lambda -->
+  <rect x="335" y="150" width="230" height="64" rx="8" class="box lambda"/>
+  <text x="450" y="176" text-anchor="middle" class="title">Ingest Lambda (C#)</text>
+  <text x="450" y="195" text-anchor="middle" class="subtitle">validate, derive flightId</text>
+
+  <!-- raw bucket prefix -->
+  <rect x="335" y="260" width="230" height="64" rx="8" class="box storage"/>
+  <text x="450" y="286" text-anchor="middle" class="title">S3  pos/</text>
+  <text x="450" y="305" text-anchor="middle" class="subtitle">raw POS report text</text>
+
+  <!-- parser lambda -->
+  <rect x="335" y="370" width="230" height="64" rx="8" class="box lambda"/>
+  <text x="450" y="396" text-anchor="middle" class="title">Parser Lambda (C#)</text>
+  <text x="450" y="415" text-anchor="middle" class="subtitle">structure and persist</text>
+
+  <!-- parser dlq -->
+  <rect x="40" y="370" width="230" height="64" rx="8" class="box dlq"/>
+  <text x="155" y="396" text-anchor="middle" class="title">SQS  parser DLQ</text>
+  <text x="155" y="415" text-anchor="middle" class="subtitle">after Lambda retries</text>
+
+  <!-- attachment prefix -->
+  <rect x="630" y="370" width="230" height="64" rx="8" class="box storage"/>
+  <text x="745" y="396" text-anchor="middle" class="title">S3  attachment/</text>
+  <text x="745" y="415" text-anchor="middle" class="subtitle">structured report JSON</text>
+
+  <!-- parsed reports table -->
+  <rect x="630" y="460" width="230" height="64" rx="8" class="box database"/>
+  <text x="745" y="486" text-anchor="middle" class="title">DynamoDB  parsed reports</text>
+  <text x="745" y="505" text-anchor="middle" class="subtitle">flightId + report timestamp</text>
+
+  <!-- calculation queue -->
+  <rect x="335" y="520" width="230" height="64" rx="8" class="box queue"/>
+  <text x="450" y="546" text-anchor="middle" class="title">SQS  calculation queue</text>
+  <text x="450" y="565" text-anchor="middle" class="subtitle">flightId + timestamp</text>
+
+  <!-- calculation dlq -->
+  <rect x="40" y="520" width="230" height="64" rx="8" class="box dlq"/>
+  <text x="155" y="546" text-anchor="middle" class="title">SQS  calculation DLQ</text>
+  <text x="155" y="565" text-anchor="middle" class="subtitle">after 3 receives</text>
+
+  <!-- calculator lambda -->
+  <rect x="335" y="630" width="230" height="64" rx="8" class="box lambda"/>
+  <text x="450" y="656" text-anchor="middle" class="title">Calculator Lambda (C#)</text>
+  <text x="450" y="675" text-anchor="middle" class="subtitle">haversine, time, fuel</text>
+
+  <!-- results prefix -->
+  <rect x="630" y="630" width="230" height="64" rx="8" class="box storage"/>
+  <text x="745" y="656" text-anchor="middle" class="title">S3  results/</text>
+  <text x="745" y="675" text-anchor="middle" class="subtitle">inputs + outputs JSON</text>
+
+  <!-- results table -->
+  <rect x="630" y="720" width="230" height="64" rx="8" class="box database"/>
+  <text x="745" y="746" text-anchor="middle" class="title">DynamoDB  results</text>
+  <text x="745" y="765" text-anchor="middle" class="subtitle">flightId + result timestamp</text>
+
+  <!-- status lambda -->
+  <rect x="335" y="800" width="230" height="64" rx="8" class="box lambda"/>
+  <text x="450" y="826" text-anchor="middle" class="title">Status Lambda (C#)</text>
+  <text x="450" y="845" text-anchor="middle" class="subtitle">latest state of a flight</text>
+
+  <!-- ============================ edges ============================ -->
+
+  <!-- client -> api gateway -->
+  <path d="M270,72 L332,72" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- api gateway -> ingest -->
+  <path d="M450,104 L450,147" class="edge" marker-end="url(#arrow)"/>
+  <text x="462" y="131" class="edgeLabel">POST /pos-reports</text>
+
+  <!-- ingest -> s3 pos/ -->
+  <path d="M450,214 L450,257" class="edge" marker-end="url(#arrow)"/>
+  <text x="462" y="241" class="edgeLabel">pos/{flightId}-{receivedAt}</text>
+
+  <!-- s3 pos/ -> parser -->
+  <path d="M450,324 L450,367" class="edge" marker-end="url(#arrow)"/>
+  <text x="462" y="351" class="edgeLabel">s3:ObjectCreated, prefix pos/</text>
+
+  <!-- parser -> attachment -->
+  <path d="M565,392 L627,392" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- parser -> parsed reports table -->
+  <path d="M565,414 L597,414 L597,492 L627,492" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- parser -> parser dlq -->
+  <path d="M332,402 L273,402" class="edgeDashed" marker-end="url(#arrowDashed)"/>
+
+  <!-- parser -> queue -->
+  <path d="M450,434 L450,517" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- queue -> calculation dlq -->
+  <path d="M332,552 L273,552" class="edgeDashed" marker-end="url(#arrowDashed)"/>
+
+  <!-- queue -> calculator -->
+  <path d="M450,584 L450,627" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- calculator -> results prefix -->
+  <path d="M565,652 L627,652" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- calculator -> results table -->
+  <path d="M565,674 L597,674 L597,752 L627,752" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- api gateway -> status lambda, down the corridor between the columns -->
+  <path d="M335,88 L302,88 L302,832 L332,832" class="edge" marker-end="url(#arrow)"/>
+  <text x="450" y="789" text-anchor="middle" class="edgeLabel">GET /status/{flightId}</text>
+
+  <!-- status lambda reads -->
+  <path d="M565,812 L655,528" class="edgeDashed" marker-end="url(#arrowDashed)"/>
+  <path d="M565,822 L660,697" class="edgeDashed" marker-end="url(#arrowDashed)"/>
+  <path d="M565,832 L660,786" class="edgeDashed" marker-end="url(#arrowDashed)"/>
+  <text x="585" y="880" class="edgeLabel">reads the latest row from each table,</text>
+  <text x="585" y="896" class="edgeLabel">then the result object it points at</text>
+
+  <!-- caption -->
+  <text x="40" y="880" class="caption">Solid arrows: the path a report takes.</text>
+  <text x="40" y="896" class="caption">Dashed arrows: reads and failure paths.</text>
+  <text x="40" y="918" class="caption">One S3 bucket holds all three prefixes. Every Lambda has its own execution role and log group.</text>
+</svg>

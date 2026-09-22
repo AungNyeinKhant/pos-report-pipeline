@@ -1,0 +1,20 @@
+# .NET build output. Scoped to the solution: a bare "bin/" rule would also swallow
+# infra/bin, which holds the CDK app entry point.
+src/**/bin/
+src/**/obj/
+src/**/TestResults/
+*.user
+
+# CDK / node
+node_modules/
+cdk.out/
+
+# Compiled TypeScript. The CDK app runs from .ts via ts-node, so no .js is checked in.
+infra/**/*.js
+infra/**/*.d.ts
+!infra/jest.config.js
+
+# tooling
+.vs/
+.idea/
+.DS_Store

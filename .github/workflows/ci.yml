@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: infra/package-lock.json
+
+      - name: Build and test the C# solution
+        working-directory: src
+        run: dotnet test --configuration Release
+
+      - name: Install CDK dependencies
+        working-directory: infra
+        run: npm ci
+
+      - name: Test the CDK app
+        working-directory: infra
+        run: npm test
+
+      - name: Synthesize the stack
+        working-directory: infra
+        run: npx cdk synth --quiet

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Pure domain + application layer: parsing, geo maths, flight calculations and the
+    use cases that orchestrate them. Deliberately has NO AWS dependency so that all of
+    the interesting logic can be unit tested locally in milliseconds.
+  -->
+  <PropertyGroup>
+    <RootNamespace>PosPipeline.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

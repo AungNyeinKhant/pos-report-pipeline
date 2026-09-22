@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PosPipeline.StatusApi</RootNamespace>
+    <AssemblyName>PosPipeline.StatusApi</AssemblyName>
+    <!-- A Lambda class-library package: no executable host is produced or needed. -->
+    <UseAppHost>false</UseAppHost>
+    <!--
+      Class libraries do not emit a runtimeconfig.json by default, but the managed Lambda
+      runtime needs one in /var/task to start the function. Without this the function fails
+      at init with "The /var/task directory is missing the required .runtimeconfig.json file".
+    -->
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.Core" />
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PosPipeline.Aws\PosPipeline.Aws.csproj" />
+    <ProjectReference Include="..\PosPipeline.Core\PosPipeline.Core.csproj" />
+  </ItemGroup>
+
+</Project>
